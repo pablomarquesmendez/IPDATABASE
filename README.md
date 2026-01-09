@@ -10,7 +10,6 @@ IPDB is designed to answer critical operational questions quickly and reliably:
 - Where is it connected?
 - How is it authenticated?
 - What is its current and historical state?
-- What actions can or should be automated?
 
 ---
 
