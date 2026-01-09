@@ -89,6 +89,20 @@ The system is built for day-to-day network operations:
 
 ---
 
+## Integrations
+
+IPDB integrates with a number of existing network and infrastructure platforms to provide unified visibility and automation:
+
+- **ClearPass** – Network access control integration for switch and MAC-based policy enforcement
+- **Infoblox** – IP address management (IPAM), DNS, and DHCP correlation
+- **OpenNMS** – Fault and performance monitoring with contextual device linkage
+- **WhatsUp Gold** – Device availability, alerting, and operational state visibility
+- **Aruba Controllers** – Wireless infrastructure integration for client and access point visibility
+- **Cisco CMS** – Collaboration infrastructure integration for endpoint and service awareness
+- **ServiceNow** *(in progress)* – Incident, change, and asset lifecycle integration
+
+---
+
 ## What Makes IPDB Different
 
 IPDB stands apart by design:
