@@ -27,7 +27,7 @@ IPDB models network infrastructure at a level beyond traditional CMDBs, includin
   - Power supplies
   - Stack members
   - Temperature sensors
-- Vendor-specific behavior and capabilities (Cisco Catalyst/Nexus, Juniper, etc.)
+- Vendor-specific behavior and capabilities (Cisco Catalyst/Nexus, Juniper, Extreme, Aruba HPE, Palo Alto, Fortinet etc.)
 
 ---
 
