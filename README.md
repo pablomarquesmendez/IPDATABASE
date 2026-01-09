@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **IP Database (IPDB)** is a centralized system that serves as the **authoritative source of truth** for network infrastructure. It correlates devices, ports, VLANs, MAC addresses, physical locations, power and environmental data, authentication state, and operational status across multiple campuses and environments.
+The **IP Database (IPDB)** is a centralized system that serves as the **authoritative source of truth** for network infrastructure. It is written primarily in **PHP**, with supporting **Perl/Expect** and **Bash** components. It correlates devices, ports, VLANs, MAC addresses, physical locations, power and environmental data, authentication state, and operational status across multiple campuses and environments.
 
 IPDB is designed to answer critical operational questions quickly and reliably:
 
