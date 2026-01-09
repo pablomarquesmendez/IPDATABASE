@@ -101,6 +101,12 @@ IPDB integrates with a number of existing network and infrastructure platforms t
 - **ServiceNow** *(in progress)* – Incident, change, and asset lifecycle integration
 - **Cisco Support APIs** – Serial number validation and automated End-of-Support / End-of-Life checks / Version CVEs
 - **Juniper Support APIs** – Automated End-of-Support / End-of-Life checks
+- **Elasticsearch** – Centralized log indexing, search, and correlation
+- **ElastiFlow** – Network flow analytics correlated with devices, ports, and locations
+- **Grafana** – Unified dashboards and visualizations powered by IPDB-contextualized data
+- **InfluxDB** – Time-series storage for telemetry, environmental data, and performance metrics
+- **Medigate (Claroty)** – Medical and IoT device visibility and metadata correlation
+
 ---
 
 ## What Makes IPDB Different
