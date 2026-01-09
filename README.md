@@ -100,7 +100,7 @@ IPDB integrates with a number of existing network and infrastructure platforms t
 - **Aruba Controllers** – Wireless infrastructure integration for client and access point visibility
 - **Cisco CMS** – Collaboration infrastructure integration for endpoint and service awareness
 - **ServiceNow** *(in progress)* – Incident, change, and asset lifecycle integration
-- **Cisco Support APIs** – Serial number validation and automated End-of-Support / End-of-Life checks
+- **Cisco Support APIs** – Serial number validation and automated End-of-Support / End-of-Life checks / Version CVEs
 - **Juniper Support APIs** – Automated End-of-Support / End-of-Life checks
 ---
 
