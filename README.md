@@ -113,7 +113,7 @@ IPDB integrates with a number of existing network and infrastructure platforms t
 
 IPDB stands apart by design:
 
-- **Opinionated** – Encodes how the network actually operates
+- **Explicit** – Encodes how the network actually operates
 - **Deeply integrated** – Not a wrapper around vendor tools
 - **State-aware** – Combines real-time visibility with historical context
 - **Dual-purpose** – Functions as both a control plane and a visibility plane
