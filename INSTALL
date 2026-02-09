@@ -1,0 +1,105 @@
+INSTALLATION INSTRUCTIONS
+=========================
+
+Prerequisites
+-------------
+1. Ensure you have root or sudo access
+2. A working Rocky Linux/AlmaLinux/RHEL 8+ system
+
+Installation Steps
+------------------
+
+1. Install EPEL Repository and Enable Modules
+   ------------------------------------------
+   sudo dnf -y install epel-release
+   sudo dnf module reset php
+   sudo dnf -y module enable php:8.2
+   sudo dnf config-manager --set-enabled powertools
+
+2. Install IpDatabase RPM
+   -----------------------
+   sudo dnf install IpDatabase-.....rpm
+
+3. SELinux Configuration (Optional - for ping functionality)
+   ---------------------------------------------------------
+   # To temporarily disable SELinux:
+   sudo setenforce 0
+   
+   # To permanently disable (edit /etc/selinux/config):
+   # Change SELINUX=enforcing to SELINUX=permissive
+
+4. Database Installation and Configuration
+   ---------------------------------------
+   sudo dnf -y module reset postgresql
+   sudo dnf -y module enable postgresql:15  # Version 16 is also acceptable
+   sudo dnf install -y postgresql-server postgresql-contrib
+   sudo /usr/bin/postgresql-setup --initdb --unit postgresql
+   
+   # Edit authentication method:
+   # sudo vi /var/lib/pgsql/data/pg_hba.conf
+   # Replace:
+   # host    all             all             127.0.0.1/32            ident
+   # With:
+   # host    all             all             127.0.0.1/32            md5
+   
+   sudo systemctl enable postgresql
+   sudo systemctl restart postgresql
+
+5. Database User and Schema Setup
+   -------------------------------
+   sudo -u postgres createuser -W ipv2
+   # Enter a password when prompted
+   
+   sudo -u postgres createdb -O ipv2 ipv2
+   
+   sudo -u ipv2 psql ipv2 -c "CREATE EXTENSION pg_trgm;"
+   sudo -u ipv2 psql ipv2 -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+   
+   # Import database schema and data
+   sudo -u ipv2 psql < ipv2_schema.sql
+   sudo -u ipv2 psql ipv2 < ipdatabase.sql
+   sudo -u ipv2 psql ipv2 < bootstrap.sql
+
+6. Configuration Files
+   --------------------
+   # Web configuration
+   sudo cp /var/www/html/config.php.sample /var/www/html/config.php
+   sudo vi /var/www/html/config.php  # Edit and change secret
+   
+   # Application configuration
+   sudo cp /home/ipv2/bin/config.txt.sample /home/ipv2/bin/config.txt
+   sudo vi /home/ipv2/bin/config.txt  # Edit as needed
+
+7. Enable Services
+   ----------------
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now watch-archive-dir.service
+   sudo systemctl enable --now watch-jtac-dir.service
+   sudo systemctl enable --now watch-scan-dir.service
+   sudo systemctl enable --now watch-switch-port_names.service
+
+8. PHP Dependencies
+   -----------------
+   sudo dnf -y install composer
+   cd /var/www/html
+   sudo composer require influxdb/influxdb-php
+
+9. Initial Setup
+   --------------
+   # Change admin password
+   sudo -u ipv2 php /home/ipv2/bin/change_user_password.php username=admin new_password=new_password
+   
+   # Browse to your server:
+   # http://your-server-ip
+   # Login with: admin / new_password
+
+Troubleshooting
+---------------
+- If services fail to start, check journalctl for specific service errors
+- Ensure firewall allows HTTP/HTTPS traffic if accessing remotely
+- Verify PostgreSQL is running: sudo systemctl status postgresql
+- Check web server configuration if unable to access web interface
+
+Support
+-------
+For issues, please check the documentation or open an issue in the repository.
