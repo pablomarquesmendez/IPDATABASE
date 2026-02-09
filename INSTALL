@@ -15,6 +15,7 @@ Installation Steps
    sudo dnf module reset php
    sudo dnf -y module enable php:8.2
    sudo dnf config-manager --set-enabled powertools
+   sudo dnf -y update
 
 2. Install IpDatabase RPM
    -----------------------
