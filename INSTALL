@@ -52,7 +52,7 @@ Installation Steps
 
 5. Database User and Schema Setup
    -------------------------------
-   sudo -u postgres createuser -W ipv2
+   sudo -u postgres createuser --pwprompt ipv2
    # Enter a password when prompted
    
    sudo -u postgres createdb -O ipv2 ipv2
@@ -61,15 +61,16 @@ Installation Steps
    sudo -u ipv2 psql ipv2 -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
    
    # Import database schema and data
-   sudo -u ipv2 psql < ipv2_schema.sql
-   sudo -u ipv2 psql ipv2 < ipdatabase.sql
-   sudo -u ipv2 psql ipv2 < bootstrap.sql
+   sudo -u ipv2 psql ipv2 < /home/ipv2/ipv2_schema.sql
+   sudo -u ipv2 psql ipv2 < /home/ipv2/ipdatabase.sql
+   sudo -u ipv2 psql ipv2 < /home/ipv2/bootstrap.sql
+   sudo -u ipv2 psql ipv2 < /home/ipv2/global_config.sql
 
 6. Configuration Files
    --------------------
    # Web configuration
    sudo cp /var/www/html/config.php.sample /var/www/html/config.php
-   sudo vi /var/www/html/config.php  # Edit and change secret
+   sudo vi /var/www/html/config.php  # Edit and change secret and database user password chosen above
    
    # Application configuration
    sudo cp /home/ipv2/bin/config.txt.sample /home/ipv2/bin/config.txt
