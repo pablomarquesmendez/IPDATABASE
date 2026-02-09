@@ -17,9 +17,9 @@ Installation Steps
    sudo dnf config-manager --set-enabled powertools
    sudo dnf -y update
    if Almalinux 9:
-      dnf -y install wget 
-      wget https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/s/sipcalc-1.1.6-17.el8.x86_64.rpm
-      rpm -Uvh sipcalc-1.1.6-17.el8.x86_64.rpm
+      sudo dnf -y install wget 
+      sudo wget https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/s/sipcalc-1.1.6-17.el8.x86_64.rpm
+      sudo rpm -Uvh sipcalc-1.1.6-17.el8.x86_64.rpm
 
 2. Install IpDatabase RPM
    -----------------------
