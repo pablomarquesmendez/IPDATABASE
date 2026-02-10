@@ -39,12 +39,8 @@ Installation Steps
    sudo /usr/bin/postgresql-setup --initdb --unit postgresql
    
    # Edit authentication method:
-   # sudo vi /var/lib/pgsql/data/pg_hba.conf
-   # Replace:
-   # host    all             all             127.0.0.1/32            ident
-   # With:
-   # host    all             all             127.0.0.1/32            md5
-   
+   sudo sed -i -E '/^host\s+all\s+all\s+(127\.0\.0\.1\/32|::1\/128)\s+ident$/s/ident$/md5/' /var/lib/pgsql/data/pg_hba.conf
+    
    sudo systemctl enable postgresql
    sudo systemctl restart postgresql
 
