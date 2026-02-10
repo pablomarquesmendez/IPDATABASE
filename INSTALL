@@ -50,14 +50,14 @@ Installation Steps
 
    su - postgres -c "createdb -O ipv2 ipv2"
    
-   sudo -u ipv2 psql ipv2 -c "CREATE EXTENSION pg_trgm;"
-   sudo -u ipv2 psql ipv2 -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+   sudo -iu ipv2 psql ipv2 -c "CREATE EXTENSION pg_trgm;"
+   sudo -iu ipv2 psql ipv2 -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
    
    # Import database schema and data
-   sudo -u ipv2 psql ipv2 < /home/ipv2/ipv2_schema.sql
-   sudo -u ipv2 psql ipv2 < /home/ipv2/ipdatabase.sql
-   sudo -u ipv2 psql ipv2 < /home/ipv2/bootstrap.sql
-   sudo -u ipv2 psql ipv2 < /home/ipv2/global_config.sql
+   sudo -iu ipv2 psql ipv2 < /home/ipv2/ipv2_schema.sql
+   sudo -iu ipv2 psql ipv2 < /home/ipv2/ipdatabase.sql
+   sudo -iu ipv2 psql ipv2 < /home/ipv2/bootstrap.sql
+   sudo -iu ipv2 psql ipv2 < /home/ipv2/global_config.sql
 
 6. Configuration Files
    --------------------
