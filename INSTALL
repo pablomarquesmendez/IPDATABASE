@@ -45,14 +45,11 @@ Installation Steps
    
 5. Database User and Schema Setup
    -------------------------------
-   sudo -u postgres createuser --pwprompt ipv2
-   # Enter a password when prompted
-
+   DB_PASS=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c32)
+   sudo -u postgres psql -c "CREATE USER ipv2 WITH PASSWORD '$DB_PASS';"
    su - postgres -c "createdb -O ipv2 ipv2"
-   
    sudo -iu ipv2 psql ipv2 -c "CREATE EXTENSION pg_trgm;"
    sudo -iu ipv2 psql ipv2 -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
-   
    # Import database schema and data
    sudo -iu ipv2 psql ipv2 < /home/ipv2/ipv2_schema.sql
    sudo -iu ipv2 psql ipv2 < /home/ipv2/ipdatabase.sql
@@ -63,13 +60,13 @@ Installation Steps
    --------------------
    # Web configuration
    sudo cp /var/www/html/config.php.sample /var/www/html/config.php
-   RANDOM_STR=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c32)
-   sudo sed -i "s/\$secret=\"change this to a random string\";/\$secret=\"$RANDOM_STR\";/" config.php
-   sudo vi /var/www/html/config.php  # Edit and change the database user password chosen above
+   RANDOM_STR=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c64)
+   sudo sed -i "s/\$secret=\"change this to a random string\";/\$secret=\"$RANDOM_STR\";/" /var/www/html/config.php
+   sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /var/www/html/config.php   
    
    # Application configuration
    sudo cp /home/ipv2/bin/config.txt.sample /home/ipv2/bin/config.txt
-   sudo vi /home/ipv2/bin/config.txt  # Edit as needed
+   sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /home/ipv2/bin/config.php
 
 7. Enable Services
    ----------------
