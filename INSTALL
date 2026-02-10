@@ -41,9 +41,8 @@ Installation Steps
    # Edit authentication method:
    sudo sed -i -E '/^host\s+all\s+all\s+(127\.0\.0\.1\/32|::1\/128)\s+ident$/s/ident$/md5/' /var/lib/pgsql/data/pg_hba.conf
     
-   sudo systemctl enable postgresql
-   sudo systemctl restart postgresql
-
+   sudo systemctl enable --now postgresql
+   
 5. Database User and Schema Setup
    -------------------------------
    sudo -u postgres createuser --pwprompt ipv2
