@@ -83,6 +83,8 @@ Installation Steps
    sudo systemctl enable --now watch-jtac-dir.service
    sudo systemctl enable --now watch-scan-dir.service
    sudo systemctl enable --now watch-switch-port_names.service
+   sudo -u ipv2 crontab /home/ipv2/crontab
+   sudo -u root crontab /home/ipv2/root-crontab
 
 8. PHP Dependencies
    -----------------
