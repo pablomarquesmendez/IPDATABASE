@@ -65,7 +65,7 @@ Installation Steps
    
    # Application configuration
    sudo cp /home/ipv2/bin/config.txt.sample /home/ipv2/bin/config.txt
-   sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /home/ipv2/bin/config.php
+   sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /home/ipv2/bin/config.txt
 
 7. Enable Services
    ----------------
