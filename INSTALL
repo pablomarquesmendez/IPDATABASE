@@ -63,7 +63,9 @@ Installation Steps
    --------------------
    # Web configuration
    sudo cp /var/www/html/config.php.sample /var/www/html/config.php
-   sudo vi /var/www/html/config.php  # Edit and change secret and database user password chosen above
+   RANDOM_STR=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c32)
+   sudo sed -i "s/\$secret=\"change this to a random string\";/\$secret=\"$RANDOM_STR\";/" config.php
+   sudo vi /var/www/html/config.php  # Edit and change the database user password chosen above
    
    # Application configuration
    sudo cp /home/ipv2/bin/config.txt.sample /home/ipv2/bin/config.txt
