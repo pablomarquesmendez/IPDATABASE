@@ -29,9 +29,7 @@ Installation Steps
    ---------------------------------------------------------
    # To temporarily disable SELinux:
    sudo setenforce 0
-   
-   # To permanently disable (edit /etc/selinux/config):
-   # Change SELINUX=enforcing to SELINUX=permissive
+   sudo sed -i -E 's/^(SELINUX=)\s*enforcing/\1permissive/' /etc/selinux/config
 
 4. Database Installation and Configuration
    ---------------------------------------
