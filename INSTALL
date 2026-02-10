@@ -47,8 +47,8 @@ Installation Steps
    -------------------------------
    sudo -u postgres createuser --pwprompt ipv2
    # Enter a password when prompted
-   
-   sudo -u postgres createdb -O ipv2 ipv2
+
+   su - postgres -c "createdb -O ipv2 ipv2"
    
    sudo -u ipv2 psql ipv2 -c "CREATE EXTENSION pg_trgm;"
    sudo -u ipv2 psql ipv2 -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
