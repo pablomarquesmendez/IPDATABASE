@@ -15,8 +15,9 @@ Installation Steps
    sudo dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
    sudo dnf install dnf-plugins-core -y
    sudo dnf module reset php -y
-   sudo dnf -y module enable php:remi-8.2 -y
-   sudo dnf -y update
+   sudo dnf module enable php:remi-8.2 -y
+   sudo dnf install php php-ssh2 php-cli php-common php-devel php-pear -y
+   sudo dnf update -y
    # if Almalinux 9:
       sudo dnf -y install wget 
       sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/s/sipcalc-1.1.6-17.el8.x86_64.rpm
