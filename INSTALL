@@ -98,6 +98,7 @@ Installation Steps
    # Browse to your server:
    # http://your-server-ip
    # Login with: admin / new_password
+   Click Search, Click edit, Global Config, GENERIC and modify server_url and server_ip to the appropriate values.
 
 Troubleshooting
 ---------------
