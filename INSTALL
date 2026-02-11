@@ -86,6 +86,7 @@ Installation Steps
    sudo composer require influxdb/influxdb-php
 
 9. Enable websocket for web switch terminal
+   -----------------
    sudo mv /etc/httpd/conf.d/websocketd.sample /etc/httpd/conf.d/websocketd.conf
    sudo systemctl restart httpd
 
