@@ -83,7 +83,11 @@ Installation Steps
    cd /var/www/html
    sudo composer require influxdb/influxdb-php
 
-9. Initial Setup
+9. Enable websocket for web switch terminal
+   sudo mv /etc/httpd/conf.d/websocket.sample /etc/httpd/conf.d/websocket.conf
+   sudo systemctl restart httpd
+
+10. Initial Setup
    --------------
    # Change admin password
    sudo -u ipv2 php /home/ipv2/bin/change_user_password.php username=admin new_password=new_password
