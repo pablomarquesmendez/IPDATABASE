@@ -12,17 +12,11 @@ Installation Steps
 1. Install EPEL Repository and Enable Modules
    ------------------------------------------
    sudo dnf -y install epel-release
-   
    sudo dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
-   
    sudo dnf install dnf-plugins-core -y
-   
    sudo dnf module reset php -y
-   
    sudo dnf module enable php:remi-8.2 -y
-   
    sudo dnf install php php-ssh2 php-cli php-common php-devel php-pear -y
-   
    sudo dnf update -y
    
    # if Almalinux 9:
