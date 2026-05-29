@@ -1,113 +1,141 @@
-INSTALLATION INSTRUCTIONS
-=========================
+# Installation Instructions
 
-Prerequisites
--------------
+## Prerequisites
+
 1. Ensure you have root or sudo access
-2. A working Rocky Linux/AlmaLinux/RHEL 8+ system
+2. A working Rocky Linux / AlmaLinux / RHEL 8+ system
 
-Installation Steps
-------------------
+---
 
-1. Install EPEL Repository and Enable Modules
-   ------------------------------------------
-   sudo dnf -y install epel-release
-   sudo dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
-   sudo dnf install dnf-plugins-core -y
-   sudo dnf module reset php -y
-   sudo dnf module enable php:remi-8.2 -y
-   sudo dnf install php php-ssh2 php-cli php-common php-devel php-pear -y
-   sudo dnf update -y
-   
-   # if Almalinux 9:
-      sudo dnf -y install wget 
-      sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/s/sipcalc-1.1.6-17.el8.x86_64.rpm
+## Installation Steps
 
-3. Install IpDatabase RPM
-   -----------------------
-   sudo dnf install IpDatabase-.....rpm
+### 1. Install EPEL Repository and Enable Modules
 
-4. SELinux Configuration (Optional - for ping functionality)
-   ---------------------------------------------------------
-   # To temporarily disable SELinux:
-   sudo setenforce 0
-   sudo sed -i -E 's/^(SELINUX=)\s*enforcing/\1permissive/' /etc/selinux/config
+```bash
+sudo dnf -y install epel-release
+sudo dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
+sudo dnf install dnf-plugins-core -y
+sudo dnf module reset php -y
+sudo dnf module enable php:remi-8.2 -y
+sudo dnf install php php-ssh2 php-cli php-common php-devel php-pear -y
+sudo dnf update -y
+```
 
-5. Database Installation and Configuration
-   ---------------------------------------
-   sudo dnf -y module reset postgresql
-   sudo dnf -y module enable postgresql:16  # Version 15 is also acceptable
-   sudo dnf install -y postgresql-server postgresql-contrib
-   sudo /usr/bin/postgresql-setup --initdb --unit postgresql
-   
-   # Edit authentication method:
-   sudo sed -i -E '/^host\s+all\s+all\s+(127\.0\.0\.1\/32|::1\/128)\s+ident$/s/ident$/md5/' /var/lib/pgsql/data/pg_hba.conf
-    
-   sudo systemctl enable --now postgresql
-   
-6. Database User and Schema Setup
-   -------------------------------
-   DB_PASS=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c32)
-   sudo -u postgres psql -c "CREATE USER ipv2 WITH PASSWORD '$DB_PASS';"
-   su - postgres -c "createdb -O ipv2 ipv2"
-   sudo -iu ipv2 psql ipv2 -c "CREATE EXTENSION pg_trgm;"
-   sudo -iu ipv2 psql ipv2 -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
-   # Import database schema and data
-   sudo -iu ipv2 psql ipv2 < /home/ipv2/ipv2_schema.sql
-   sudo -iu ipv2 psql ipv2 < /home/ipv2/ipdatabase.sql
-   sudo -iu ipv2 psql ipv2 < /home/ipv2/bootstrap.sql
-   sudo -iu ipv2 psql ipv2 < /home/ipv2/global_config.sql
+> **AlmaLinux 9 only:**
+> ```bash
+> sudo dnf -y install wget
+> sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/s/sipcalc-1.1.6-17.el8.x86_64.rpm
+> ```
 
-7. Configuration Files
-   --------------------
-   # Web configuration
-   sudo cp /var/www/html/config.php.sample /var/www/html/config.php
-   RANDOM_STR=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c64)
-   sudo sed -i "s/\$secret=\"change this to a random string\";/\$secret=\"$RANDOM_STR\";/" /var/www/html/config.php
-   sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /var/www/html/config.php   
-   
-   # Application configuration
-   sudo cp /home/ipv2/bin/config.txt.sample /home/ipv2/bin/config.txt
-   sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /home/ipv2/bin/config.txt
+### 2. Install IpDatabase RPM
 
-8. Enable Services
-   ----------------
-   sudo systemctl daemon-reload
-   sudo systemctl enable --now watch-archive-dir.service
-   sudo systemctl enable --now watch-jtac-dir.service
-   sudo systemctl enable --now watch-scan-dir.service
-   sudo systemctl enable --now watch-switch-port_names.service
-   sudo -u ipv2 crontab /home/ipv2/crontab
-   sudo -u root crontab /home/ipv2/root-crontab
+```bash
+sudo dnf install IpDatabase-.....rpm
+```
 
-9. PHP Dependencies
-   -----------------
-   sudo dnf -y install composer
-   cd /var/www/html
-   sudo composer require influxdb/influxdb-php
+### 3. SELinux Configuration *(Optional — for ping functionality)*
 
-10. Enable websocket for web switch terminal
-   -----------------
-   sudo mv /etc/httpd/conf.d/websocketd.sample /etc/httpd/conf.d/websocketd.conf
-   sudo systemctl restart httpd
+```bash
+# Temporarily disable SELinux
+sudo setenforce 0
+sudo sed -i -E 's/^(SELINUX=)\s*enforcing/\1permissive/' /etc/selinux/config
+```
 
-11. Initial Setup
-   --------------
-   # Change admin password
-   sudo -u ipv2 php /home/ipv2/bin/change_user_password.php username=admin new_password=new_password
-   
-   # Browse to your server:
-   # http://your-server-ip
-   # Login with: admin / new_password
-   Click Search, Click edit, Global Config, GENERIC and modify server_url and server_ip to the appropriate values.
+### 4. Database Installation and Configuration
 
-Troubleshooting
----------------
-- If services fail to start, check journalctl for specific service errors
-- Ensure firewall allows HTTP/HTTPS traffic if accessing remotely
-- Verify PostgreSQL is running: sudo systemctl status postgresql
-- Check web server configuration if unable to access web interface
+```bash
+sudo dnf -y module reset postgresql
+sudo dnf -y module enable postgresql:16  # Version 15 is also acceptable
+sudo dnf install -y postgresql-server postgresql-contrib
+sudo /usr/bin/postgresql-setup --initdb --unit postgresql
 
-Support
--------
+# Edit authentication method
+sudo sed -i -E '/^host\s+all\s+all\s+(127\.0\.0\.1\/32|::1\/128)\s+ident$/s/ident$/md5/' \
+  /var/lib/pgsql/data/pg_hba.conf
+
+sudo systemctl enable --now postgresql
+```
+
+### 5. Database User and Schema Setup
+
+```bash
+DB_PASS=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c32)
+sudo -u postgres psql -c "CREATE USER ipv2 WITH PASSWORD '$DB_PASS';"
+su - postgres -c "createdb -O ipv2 ipv2"
+sudo -iu ipv2 psql ipv2 -c "CREATE EXTENSION pg_trgm;"
+sudo -iu ipv2 psql ipv2 -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+
+# Import database schema and data
+sudo -iu ipv2 psql ipv2 < /home/ipv2/ipv2_schema.sql
+sudo -iu ipv2 psql ipv2 < /home/ipv2/ipdatabase.sql
+sudo -iu ipv2 psql ipv2 < /home/ipv2/bootstrap.sql
+sudo -iu ipv2 psql ipv2 < /home/ipv2/global_config.sql
+```
+
+### 6. Configuration Files
+
+```bash
+# Web configuration
+sudo cp /var/www/html/config.php.sample /var/www/html/config.php
+RANDOM_STR=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c64)
+sudo sed -i "s/\$secret=\"change this to a random string\";/\$secret=\"$RANDOM_STR\";/" \
+  /var/www/html/config.php
+sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /var/www/html/config.php
+
+# Application configuration
+sudo cp /home/ipv2/bin/config.txt.sample /home/ipv2/bin/config.txt
+sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /home/ipv2/bin/config.txt
+```
+
+### 7. Enable Services
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now watch-archive-dir.service
+sudo systemctl enable --now watch-jtac-dir.service
+sudo systemctl enable --now watch-scan-dir.service
+sudo systemctl enable --now watch-switch-port_names.service
+sudo -u ipv2 crontab /home/ipv2/crontab
+sudo -u root crontab /home/ipv2/root-crontab
+```
+
+### 8. PHP Dependencies
+
+```bash
+sudo dnf -y install composer
+cd /var/www/html
+sudo composer require influxdb/influxdb-php
+```
+
+### 9. Enable WebSocket for Web Switch Terminal
+
+```bash
+sudo mv /etc/httpd/conf.d/websocketd.sample /etc/httpd/conf.d/websocketd.conf
+sudo systemctl restart httpd
+```
+
+### 10. Initial Setup
+
+```bash
+# Change admin password
+sudo -u ipv2 php /home/ipv2/bin/change_user_password.php username=admin new_password=new_password
+```
+
+Then browse to `http://your-server-ip` and log in with `admin` / `new_password`.
+
+Navigate to **Search → Edit → Global Config → GENERIC** and update `server_url` and `server_ip` to the appropriate values.
+
+---
+
+## Troubleshooting
+
+- If services fail to start, check logs with `journalctl -xe`
+- Ensure your firewall allows HTTP/HTTPS traffic for remote access
+- Verify PostgreSQL is running: `sudo systemctl status postgresql`
+- Check the web server configuration if the web interface is unreachable
+
+---
+
+## Support
+
 For issues, please check the documentation or open an issue in the repository.
