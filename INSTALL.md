@@ -12,27 +12,34 @@ Installation Steps
 1. Install EPEL Repository and Enable Modules
    ------------------------------------------
    sudo dnf -y install epel-release
+   
    sudo dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
+   
    sudo dnf install dnf-plugins-core -y
+   
    sudo dnf module reset php -y
+   
    sudo dnf module enable php:remi-8.2 -y
+   
    sudo dnf install php php-ssh2 php-cli php-common php-devel php-pear -y
+   
    sudo dnf update -y
+   
    # if Almalinux 9:
       sudo dnf -y install wget 
       sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/s/sipcalc-1.1.6-17.el8.x86_64.rpm
 
-2. Install IpDatabase RPM
+3. Install IpDatabase RPM
    -----------------------
    sudo dnf install IpDatabase-.....rpm
 
-3. SELinux Configuration (Optional - for ping functionality)
+4. SELinux Configuration (Optional - for ping functionality)
    ---------------------------------------------------------
    # To temporarily disable SELinux:
    sudo setenforce 0
    sudo sed -i -E 's/^(SELINUX=)\s*enforcing/\1permissive/' /etc/selinux/config
 
-4. Database Installation and Configuration
+5. Database Installation and Configuration
    ---------------------------------------
    sudo dnf -y module reset postgresql
    sudo dnf -y module enable postgresql:16  # Version 15 is also acceptable
@@ -44,7 +51,7 @@ Installation Steps
     
    sudo systemctl enable --now postgresql
    
-5. Database User and Schema Setup
+6. Database User and Schema Setup
    -------------------------------
    DB_PASS=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c32)
    sudo -u postgres psql -c "CREATE USER ipv2 WITH PASSWORD '$DB_PASS';"
@@ -57,7 +64,7 @@ Installation Steps
    sudo -iu ipv2 psql ipv2 < /home/ipv2/bootstrap.sql
    sudo -iu ipv2 psql ipv2 < /home/ipv2/global_config.sql
 
-6. Configuration Files
+7. Configuration Files
    --------------------
    # Web configuration
    sudo cp /var/www/html/config.php.sample /var/www/html/config.php
@@ -69,7 +76,7 @@ Installation Steps
    sudo cp /home/ipv2/bin/config.txt.sample /home/ipv2/bin/config.txt
    sudo sed -i "/^\$password\s*=/s/=.*$/= '$DB_PASS';/" /home/ipv2/bin/config.txt
 
-7. Enable Services
+8. Enable Services
    ----------------
    sudo systemctl daemon-reload
    sudo systemctl enable --now watch-archive-dir.service
@@ -79,18 +86,18 @@ Installation Steps
    sudo -u ipv2 crontab /home/ipv2/crontab
    sudo -u root crontab /home/ipv2/root-crontab
 
-8. PHP Dependencies
+9. PHP Dependencies
    -----------------
    sudo dnf -y install composer
    cd /var/www/html
    sudo composer require influxdb/influxdb-php
 
-9. Enable websocket for web switch terminal
+10. Enable websocket for web switch terminal
    -----------------
    sudo mv /etc/httpd/conf.d/websocketd.sample /etc/httpd/conf.d/websocketd.conf
    sudo systemctl restart httpd
 
-10. Initial Setup
+11. Initial Setup
    --------------
    # Change admin password
    sudo -u ipv2 php /home/ipv2/bin/change_user_password.php username=admin new_password=new_password
